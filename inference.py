@@ -2,9 +2,9 @@ import sys
 import os
 import pickle
 sys.path.append(os.pardir)
-from dataset.mnist import load_mnist
-import numpy as np
 from common.functions import sigmoid, softmax
+import numpy as np
+from dataset.mnist import load_mnist
 
 
 # テストデータを返す
@@ -38,9 +38,10 @@ def predict(network, x):
     return y
 
 
+'''
+#バッチを用いない
 x,t=get_data()
 network = init_network()
-
 accuracy_cnt = 0
 
 #1万枚
@@ -51,4 +52,20 @@ for i in range(len(x)):
         accuracy_cnt+=1
 
 #１万枚のうち、何枚正解したか
+print("認識精度"+str(float(accuracy_cnt)/len(x)))
+'''
+
+# バッチを使用
+x, t = get_data()
+network = init_network()
+
+batch_size = 100
+accuracy_cnt = 0
+
+for i in range(0, len(x), batch_size):
+    x_batch = x[i:i+batch_size]
+    y_batch = predict(network, x_batch)
+    p = np.argmax(y_batch, axis=1)
+    accuracy_cnt += np.sum(p == t[i:i+batch_size])
+
 print("認識精度"+str(float(accuracy_cnt)/len(x)))
