@@ -1,4 +1,4 @@
-import numpy as np
+import numpy as np 
 
 # AND
 def AND(x1, x2):
